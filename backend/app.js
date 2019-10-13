@@ -39,7 +39,6 @@ app.post("/api/recipes", (req, res, next) => {
     difficulty: req.body.difficulty,
     userId: req.body.userId
   });
-  console.log(recipe, "this is the recipe");
   recipe
     .save()
     .then(() => {
@@ -49,6 +48,37 @@ app.post("/api/recipes", (req, res, next) => {
     })
     .catch(error => {
       return res.status(400).json({
+        error: error
+      });
+    });
+});
+
+app.delete("/api/recipes/:id", (req, res, next) => {
+  recipe
+    .deleteOne({
+      _id: req.params.id
+    })
+    .then(() => {
+      res.status(200).json({
+        message: "successfully deleted"
+      });
+    })
+    .catch(error => {
+      res.status(400).json({
+        error: error
+      });
+    });
+});
+
+app.get("/app/recipes", (req, res, next) => {
+  recipe
+    .find()
+    .then(recipes => {
+      console.log(recipes, "theses are them all");
+      return res.status(200).json(recipes);
+    })
+    .catch(error => {
+      return res.status(404).json({
         error: error
       });
     });
